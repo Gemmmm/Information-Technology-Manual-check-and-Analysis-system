@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div >
+ 		<input type="text" id="searchInput"  name="input1-group2" placeholder="输入关键字" >
+       
+        <div >
+          <button class="btn btn-primary" onclick="search()">搜索</button>
+       </div>
+       </div>
+          <br>
+          <div id="test"></div>
+</body>
+</html>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+			function search(){
+				$.ajaxSetup({
+					cache:false
+				});
+				$.ajax({
+					type:"post",
+					dataType:"JSON",
+					url:"http://127.0.0.1:8080/Dazuoye/SearchServlet",
+					data:{
+						name2:$("input[id='searchInput']").val()
+					},
+					async:true,
+					success:function(data){
+						 var html = "";
+					      html += "<div class='col-md-4'><div class='card'><div class='card-header'><strong class='card-title'> 复写率" 
+		                        + " </strong></div><div class='card-body'>复写率=" + data['similar']
+		                        + "  </div></div></div>  "
+                        html +="<h3>文本</h3><div style='font-size: 0px;width: 70%'>";
+                        for(var i in data.data1)
+                        	//data.data1[i].flag+"\n"+data.data1[i].exp;
+                        //$.each(data.data1[i], function(index, item){
+                        	if(data.data1[i].flag=="1")
+                        		html += "<font style='color: red;font-size: 16px'> " +data.data1[i].exp + "，</font>  ";
+                        	else
+                        		html += "<font style='font-size: 16px'> " +data.data1[i].exp + "，</font>  ";
+                        //}); 
+                        html +="</div><br>";
+                        html += "<div class='col-md-4'><div class='card'><div class='card-header'><strong class='card-title'> 热词解释" 
+                            + " </strong></div><div class='card-body'><p class='card-text'>" + data.search
+                            + "  </p></div></div></div>  " 
+                            ;
+                    	$("#test").html(html); //在html页面id=test的标签里显示html内容
+					}
+				});
+			}
+			
+		
+		</script>
